@@ -1,0 +1,73 @@
+version: "3.7"
+
+services:
+    # image project
+    ow:
+        container_name: ow_interactive_laravel-9
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: especializati/laravel9-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        depends_on: 
+            - redis
+        networks: 
+            - HugoOw
+    
+    # nginx
+    nginx:
+        container_name: ow_interactive_nginx
+        image: nginx:alpine
+        restart: unless-stopped
+        ports: 
+            - "8990:80"
+        volumes: 
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks: 
+            - HugoOw
+
+    # db mysql
+    mysql:
+        container_name: ow_interactive_mysql
+        image: mysql:5.7.22
+        restart: unless-stopped
+        environment: 
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes: 
+            - ./.docker/mysql/dbdata:/var/lib/mysql
+        ports: 
+            - "3390:3306"
+        networks: 
+            - HugoOw
+
+    # queue
+    queue:
+        container_name: ow_interactive_queue
+        image: especializati/laravel9-app
+        restart: unless-stopped
+        command: "php artisan queue:work"
+        volumes: 
+            - ./:/var/www
+        depends_on: 
+            - redis
+            - ow
+        networks: 
+            - HugoOw
+
+    # redis
+    redis:
+        container_name: ow_interactive_redis
+        image: redis:latest
+        networks: 
+            - HugoOw
+
+networks: 
+    HugoOw:
+        driver: bridge
