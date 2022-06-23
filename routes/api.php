@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,7 +10,14 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
 
 
-Route::apiResource('users', UsersController::class);
+//register users
+
+//Route::get('/register',[RegisterController::class,'index']);
+Route::post('/register',[RegisterController::class,'store']);
+
+//users
+Route::get('/users', [UsersController::class,'index']);
+Route::post('/user/{id}',[UsersController::class,'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
