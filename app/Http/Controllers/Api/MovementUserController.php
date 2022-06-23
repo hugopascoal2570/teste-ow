@@ -16,10 +16,22 @@ class MovementUserController extends Controller
         $this->repository = $userRepository;
     }
 
-    public function credit(StoreMovement $request)
+    public function insertUserMovement(StoreMovement $request)
     {
-        $user = $this->repository->creditUserMovement($request->validated());
+        $user = $this->repository->insertUserMovement($request->validated());
 
         return new UserResource($user);
+    }
+    public function showUserMovement(){
+            
+        $user = $this->repository->showMovementUser();
+        return $user;
+    }
+
+    public function dettachMovementAndUserRelation($movement_id){
+  
+        $user = $this->repository->dettachMovementById($movement_id);
+        
+        return $user;
     }
 }

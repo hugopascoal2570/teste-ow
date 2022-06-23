@@ -46,7 +46,7 @@ class User extends Authenticatable
     ];
 
     public function movements(){
-        return $this->belongsToMany(Movement::class);
+        return $this->belongsToMany(Movement::class)->withPivot('movement_user')->withTimestamps();
     }
 
 }

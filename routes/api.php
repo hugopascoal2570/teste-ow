@@ -23,14 +23,13 @@ Route::post('/user/{id}',[UsersController::class,'show']);
 //users delete
 Route::delete('/user/delete/{id}',[UsersController::class,'destroy']);
 
-//type movement x user - credit
-Route::post('/user/{user_id}/movement/{movement_id}/credit',[MovementUserController::class,'credit']);
+//type movement x user 
+Route::post('/user/{user_id}/movement/{movement_id}/insert',[MovementUserController::class,'insertUserMovement']);
 
-//type movement x user - debit
-Route::post('/user/{idUser}/movement/{id}/debit',[MovementUserController::class,'debit']);
+//history with all users movement
+Route::get('/movements/user',[MovementUserController::class,'showUserMovement']);
 
-//type movement x user - reversal
-Route::post('/user/{idUser}/movement/{id}/reversal',[MovementUserController::class,'reversal']);
+Route::delete('/type/movement/{movement_id}/delete',[MovementUserController::class,'dettachMovementAndUserRelation']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
