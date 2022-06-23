@@ -13,22 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('movement_user', function (Blueprint $table) {
+        Schema::create('historics', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('movement_id');
             $table->unsignedBigInteger('user_id');
+            $table->enum('type', ['C', 'D', 'R']);
+            $table->double('amount', 10, 2);
+            $table->double('total_before', 10, 2);
+            $table->double('total_after', 10, 2);
+            $table->date('date');
             $table->timestamps();
-
-            $table->foreign('movement_id')
-                        ->references('id')
-                        ->on('movements')
-                        ->onDelete('cascade');
-                        
             $table->foreign('user_id')
                         ->references('id')
                         ->on('users')
                         ->onDelete('cascade');
-            
         });
     }
 
@@ -39,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movement_user');
+        Schema::dropIfExists('historics');
     }
 };

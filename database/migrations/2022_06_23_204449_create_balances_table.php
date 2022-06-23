@@ -13,10 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('movements', function (Blueprint $table) {
+        Schema::create('balances', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->unsignedBigInteger('user_id');
+            $table->double('amount', 10, 2)->default(0);
             $table->timestamps();
+            $table->foreign('user_id')
+                        ->references('id')
+                        ->on('users')
+                        ->onDelete('cascade');
         });
     }
 
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movements');
+        Schema::dropIfExists('balances');
     }
 };
