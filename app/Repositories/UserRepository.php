@@ -29,4 +29,9 @@ class UserRepository{
             'birthday'=>$data['birthday'],
         ]);
     }
+
+    public function deleteUser($id) {
+
+       return $this->entity->where('id',$id)->firstOrFail()->delete();
+    }
 }
