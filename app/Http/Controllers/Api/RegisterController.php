@@ -26,7 +26,6 @@ class RegisterController extends Controller
      */
     public function store(StoreUser $request)
     {
-
         $user = $this->repository->createNewUser($request->validated());
 
         return new UserResource($user);

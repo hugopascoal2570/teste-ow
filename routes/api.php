@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\MovementUserController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\UsersController;
 use Illuminate\Http\Request;
@@ -21,6 +22,15 @@ Route::post('/user/{id}',[UsersController::class,'show']);
 
 //users delete
 Route::delete('/user/delete/{id}',[UsersController::class,'destroy']);
+
+//type movement x user - credit
+Route::post('/user/{user_id}/movement/{movement_id}/credit',[MovementUserController::class,'credit']);
+
+//type movement x user - debit
+Route::post('/user/{idUser}/movement/{id}/debit',[MovementUserController::class,'debit']);
+
+//type movement x user - reversal
+Route::post('/user/{idUser}/movement/{id}/reversal',[MovementUserController::class,'reversal']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

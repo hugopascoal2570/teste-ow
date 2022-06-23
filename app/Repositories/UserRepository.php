@@ -34,4 +34,12 @@ class UserRepository{
 
        return $this->entity->where('id',$id)->firstOrFail()->delete();
     }
+
+    public function creditUserMovement(array $data) {
+   
+        $user = $this->entity->find($data['user_id']);
+        $user->movements()->attach($data['movement_id']);
+
+        return $user;
+     }
 }

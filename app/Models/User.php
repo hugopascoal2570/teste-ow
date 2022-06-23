@@ -14,11 +14,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    use UuidTrait;
-
-    public $incrementing = false;
-    protected $keyType = 'uuid';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -50,10 +45,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function booted(){
-        static::creating(function ($model) {
-            
-            $model->{$model->getKeyName()} = (String) Str::uuid();
-        });
+    public function movements(){
+        return $this->belongsToMany(Movement::class);
     }
+
 }
