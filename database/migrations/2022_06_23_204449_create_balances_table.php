@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->double('amount', 10, 2)->default(0);
-            $table->timestamps();
             $table->foreign('user_id')
-                        ->references('id')
-                        ->on('users')
-                        ->onDelete('cascade');
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
+
         });
     }
 

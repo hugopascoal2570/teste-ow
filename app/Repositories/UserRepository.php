@@ -2,56 +2,76 @@
 
 namespace App\Repositories;
 
-use App\Models\Movement;
 use App\Models\User;
+use App\Models\Historic;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class UserRepository{
 
-    protected $entity,$repository;
-    public function __construct(User $model, Movement $movement)
+    protected $entity, $repository;
+    public function __construct(User $model, Historic $historics)
     {
         $this->entity = $model;
-        $this->repository = $movement;
+        $this->repository = $historics;
+
     }
 
     public function getAllUsers(){
-        return $this->entity->latest()->paginate();
+        return $this->entity->latest()->paginate(300);
     }
 
-    public function getUser(string $identify){
-        return $this->entity->findOrFail($identify);
+    public function getUser(Request $request){
+        
+        return $this->entity->find($request);
     }
 
     public function createNewUser(array $data):User {
 
+        $niver = Carbon::parse($data['birthday'])->age;
+        if($niver < 18){
+            return response()->json(['error'=>'underage user'], 401);
+        }
+        else{
         return $this->entity->create([
             'name' =>$data['name'],
             'email'=>$data['email'],
-            'password'=>$data['password'],
+            'password'=>bcrypt($data['password']),
             'birthday'=>$data['birthday'],
         ]);
     }
+}
 
     public function deleteUser($id) {
 
-       return $this->entity->where('id',$id)->firstOrFail()->delete();
+       return $this->entity->where('id',$id)->get();
     }
 
-    public function insertUserMovement(array $data) {
-   
-        $user = $this->entity->find($data['user_id']);
-        $user->movements()->attach($data['movement_id']);
+    public function depositBalance($request, $balance){
 
-        return $user;
-     }
+        dd($request);
+        $balance = auth()->user()->balance()->firstOrCreate([]);
+        $balance->deposit($request->value);
 
-     public function showMovementUser(){
-            return $this->entity->with('movements')->paginate(20);
-     }
+        return $balance;
+    }
 
-     public function dettachMovementById($movement_id){
+    public function debitBalance($request, $balance){
+
+    $balance = auth()->user()->balance()->firstOrCreate([]);
+    $balance->debit($request->value);
+
+    return $balance;
+    }
+    public function historics(){
+      
+        dd($result = auth()->user()->historics()->with(['user'])->get());
+    }
+
+    public function deleteBalanceById($request){
+    
+       dd($this->entity->with('historics')->firstOrFail()->get());
         
-        dd($movement_id);
-
-     }
+    }
 }
