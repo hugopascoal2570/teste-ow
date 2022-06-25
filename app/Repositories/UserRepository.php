@@ -7,6 +7,7 @@ use App\Models\Historic;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class UserRepository{
 
@@ -43,14 +44,8 @@ class UserRepository{
     }
 }
 
-    public function deleteUser($id) {
-
-       return $this->entity->where('id',$id)->get();
-    }
-
     public function depositBalance($request, $balance){
 
-        dd($request);
         $balance = auth()->user()->balance()->firstOrCreate([]);
         $balance->deposit($request->value);
 
@@ -64,14 +59,21 @@ class UserRepository{
 
     return $balance;
     }
+    
     public function historics(){
       
-        dd($result = auth()->user()->historics()->with(['user'])->get());
+        return auth()->user()->historics()->with(['user'])->get();
     }
 
     public function deleteBalanceById($request){
-    
-       dd($this->entity->with('historics')->firstOrFail()->get());
-        
+
+        $id = $request->all();
+
+       $result = $this->repository->where('user_id',$id)->with('user')->exists();
+        if($result == 'true'){
+            return response()->json(['error'=>'existem dados do usuário não podemos apagar'], 401);   
+        }
+        return $this->entity->where('id',$id)->firstOrFail()->delete();
+
     }
 }

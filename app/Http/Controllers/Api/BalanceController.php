@@ -33,6 +33,6 @@ class BalanceController extends Controller
     }
 
     public function deleteBalance(Request $request){
-        return UserResource::collection($this->repository->deleteBalanceById($request));
+        return $this->repository->deleteBalanceById($request);
     }
 }

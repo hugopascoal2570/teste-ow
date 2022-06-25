@@ -27,10 +27,5 @@ class UsersController extends Controller
        return UserResource::collection($this->repository->getUser($request));
     }
 
-    public function destroy($id)
-    {
-       $user = $this->repository->deleteUser($id);
-    
-       return response()->json([],204);
-    }
+
 }

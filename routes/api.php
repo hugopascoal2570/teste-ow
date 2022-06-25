@@ -21,9 +21,6 @@ Route::get('/users', [UsersController::class,'index']);
 //view users by id
 Route::post('/user/{id}',[UsersController::class,'show']);
 
-//users delete
-Route::delete('/user/delete/{id}',[UsersController::class,'destroy']);
-
 //Route::any('historic-search', 'BalanceController@searchHistoric')->name('historic.search');
 Route::get('/historic', [BalanceController::class,'historic'])->name('historic');
 
@@ -34,7 +31,7 @@ Route::post('/deposit/{value}', [BalanceController::class,'deposit']);
 Route::post('/debit/{value}', [BalanceController::class,'debit']);
 
 //delete
-Route::delete('/delete/{id}', [BalanceController::class,'deleteBalance']);
+Route::delete('/delete/user/balance/{id}', [BalanceController::class,'deleteBalance']);
 
 });
 
