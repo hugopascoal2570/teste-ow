@@ -32,9 +32,14 @@ class Balance extends Model{
 }
 
     public function debit(float $value){
+
+        if($this->amount < $value){
+            return response()->json(['error'=>'seu saldo e insuficiente'], 401); 
+        }
+
     $totalBefore = $this->amount ? $this->amount : 0;
     $this->amount -= number_format($value, 2, '.', '');
-    $deposit = $this->save();
+    $debit = $this->save();
 
     $historic = auth()->user()->historics()->create([
         'type'          => 'D',
@@ -44,7 +49,7 @@ class Balance extends Model{
         'date'          => date('Ymd'),
     ]);
 
-    if ($deposit && $historic) {
+    if ($debit && $historic) {
 
     return response()->json([200]);
     } 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth', [AuthController::class, 'auth']);
 
 //Route::get('/register',[RegisterController::class,'index']);
-Route::post('/register',[RegisterController::class,'store']);
+Route::post('/register',[RegisterController::class,'addUser']);
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
@@ -21,7 +21,9 @@ Route::get('/users', [UsersController::class,'index']);
 //view users by id
 Route::post('/user/{id}',[UsersController::class,'show']);
 
-//Route::any('historic-search', 'BalanceController@searchHistoric')->name('historic.search');
+//delete user by id
+Route::delete('/user/delete/{id}',[UsersController::class,'deleteUser']);
+
 Route::get('/historic', [BalanceController::class,'historic'])->name('historic');
 
 //deposito
@@ -30,9 +32,8 @@ Route::post('/deposit/{value}', [BalanceController::class,'deposit']);
 //débito
 Route::post('/debit/{value}', [BalanceController::class,'debit']);
 
-//delete
-Route::delete('/delete/user/balance/{id}', [BalanceController::class,'deleteBalance']);
-
+//delete historic
+Route::delete('/delete/historic/{id}',[BalanceController::class,'deleteHistoricById']);
 });
 
 /*

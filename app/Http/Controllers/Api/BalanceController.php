@@ -32,7 +32,8 @@ class BalanceController extends Controller
         return UserResource::collection($this->repository->historics());
     }
 
-    public function deleteBalance(Request $request){
-        return $this->repository->deleteBalanceById($request);
+    public function deleteHistoricById(Request $request){
+        
+        return $this->repository->deleteHistoric($request);
     }
 }

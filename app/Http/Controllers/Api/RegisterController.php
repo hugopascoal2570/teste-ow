@@ -24,12 +24,10 @@ class RegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUser $request)
+    public function addUser(StoreUser $request)
     {
-
-    $user = $this->repository->createNewUser($request->validated());
-
-        return new UserResource($user);
+        $user = $this->repository->createNewUser($request->validated());
+        return response()->json($user);
     }
 
 }

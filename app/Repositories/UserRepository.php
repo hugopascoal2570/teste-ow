@@ -20,7 +20,7 @@ class UserRepository{
     }
 
     public function getAllUsers(){
-        return $this->entity->latest()->paginate(300);
+        return $this->entity->orderBy('id','desc')->paginate();
     }
 
     public function getUser(Request $request){
@@ -28,14 +28,14 @@ class UserRepository{
         return $this->entity->find($request);
     }
 
-    public function createNewUser(array $data):User {
+    public function createNewUser(array $data) {
 
         $niver = Carbon::parse($data['birthday'])->age;
         if($niver < 18){
-            return response()->json(['error'=>'underage user'], 401);
+            return response()->json(['error'=>'usuário menor de idade'], 401);
         }
         else{
-        return $this->entity->create([
+       return  $this->entity->create([
             'name' =>$data['name'],
             'email'=>$data['email'],
             'password'=>bcrypt($data['password']),
@@ -43,6 +43,19 @@ class UserRepository{
         ]);
     }
 }
+    public function deleteUserById($request) {
+    $id = $request->all();
+    $verifyId = $this->repository->where('user_id',$id)->with('user')->exists();
+        if($verifyId == 'true'){
+            return response()->json(['error'=>'existem dados do usuário não podemos apagar'], 401);   
+        }
+         $this->entity->where('id',$id)->firstOrFail()->delete();
+         if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Record not found.',
+                ], 404);
+        }   
+ }
 
     public function depositBalance($request, $balance){
 
@@ -54,26 +67,21 @@ class UserRepository{
 
     public function debitBalance($request, $balance){
 
-    $balance = auth()->user()->balance()->firstOrCreate([]);
-    $balance->debit($request->value);
-
-    return $balance;
+    $debit = auth()->user()->balance()->firstOrCreate([]);
+    $debit->debit($request->value);
+    return $debit;
     }
     
     public function historics(){
-      
-        return auth()->user()->historics()->with(['user'])->get();
+        return $this->repository->with('user')->get();
+
     }
 
-    public function deleteBalanceById($request){
+    public function deleteHistoric($request){
 
-        $id = $request->all();
+        $historic_id = $request->all();
 
-       $result = $this->repository->where('user_id',$id)->with('user')->exists();
-        if($result == 'true'){
-            return response()->json(['error'=>'existem dados do usuário não podemos apagar'], 401);   
-        }
-        return $this->entity->where('id',$id)->firstOrFail()->delete();
+       return  $this->repository->where('id',$historic_id)->with('user')->delete();
 
     }
 }
