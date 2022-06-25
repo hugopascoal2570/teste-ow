@@ -26,6 +26,8 @@ Route::delete('/user/delete/{id}',[UsersController::class,'deleteUser']);
 
 Route::get('/historic', [BalanceController::class,'historic'])->name('historic');
 
+Route::post('/search/historic',[BalanceController::class,'searchHistoric']);
+
 //deposito
 Route::post('/deposit/{value}', [BalanceController::class,'deposit']);
 

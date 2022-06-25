@@ -77,6 +77,10 @@ class UserRepository{
 
     }
 
+    public function SearchHistoric(){
+        
+    }
+
     public function deleteHistoric($request){
 
         $historic_id = $request->all();

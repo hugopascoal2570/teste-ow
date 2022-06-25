@@ -32,6 +32,10 @@ class BalanceController extends Controller
         return UserResource::collection($this->repository->historics());
     }
 
+    public function searchHistoric(){
+        return UserResource::collection($this->repository->SearchHistoric());
+    }
+
     public function deleteHistoricById(Request $request){
         
         return $this->repository->deleteHistoric($request);
