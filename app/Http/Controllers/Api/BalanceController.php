@@ -30,6 +30,10 @@ class BalanceController extends Controller
   
         return new UserResource($this->repository->debitBalance($request, $balance));
     }
+    public function refund(MoneyValidationRequest $request, Balance $balance){
+  
+        return new UserResource($this->repository->refundBalance($request, $balance));
+    }
 
     public function historic(){
         return UserResource::collection($this->repository->historics());

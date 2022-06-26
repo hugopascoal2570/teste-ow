@@ -70,12 +70,17 @@ class UserRepository{
     $debit->debit($request->value);
     return $debit;
     }
+
+    public function refundBalance($request, $balance){
+
+        $debit = auth()->user()->balance()->firstOrCreate([]);
+        $debit->refund($request->value);
+        return $debit;
+        }
     
     public function historics(){
    
-
         return dd($this->repository->with('user')->get());
-       
 
     }
 

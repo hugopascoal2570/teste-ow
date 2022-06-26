@@ -65,7 +65,7 @@ O projeto conta com os Seeders dos usuários
 | /api/delete/id| DELETE| ✔ | id do usuário  | Rota para deletar um usuário específico através de seu ID|
 | /api/deposit/value| POST| ✔ | valor para depositar  | Rota para dar créditos um usuário específico através de seu ID|
 | /api/debit/value| POST| ✔ | valor para debitar saldo da conta  | Rota para retirar créditos um usuário específico através de seu ID |
-|sistema não conta com opção de refund|
+| /api/refund/value| POST| ✔ | valor para retornar saldo da conta  | Rota para retornar créditos um usuário específico através de seu ID |
 | /api/historic| GET| ✔ | X  | Rota para mostrar histórico do usuário |
 | /api/delete/historic/id| DELETE| ✔ | id do histórico  | Rota para deletar histórico do usuário|
 | /api/search/historic/all/| POST| ✔ | id do usuário  | Rota para exibir histórico do usuário em csv (apenas todas as requisições)|
