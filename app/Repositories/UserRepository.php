@@ -6,10 +6,10 @@ use App\Models\User;
 use App\Models\Historic;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Exports\HistoricsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 
 class UserRepository{
 
@@ -26,7 +26,7 @@ class UserRepository{
         
     }
 
-    public function getUser(Request $request){
+    public function getUser( $request){
         
         return $this->entity->find($request);
     }
@@ -72,7 +72,10 @@ class UserRepository{
     }
     
     public function historics(){
+   
+
         return dd($this->repository->with('user')->get());
+       
 
     }
 

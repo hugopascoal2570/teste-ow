@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteHistoricRequest;
 use App\Http\Requests\MoneyValidationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Balance;
@@ -44,12 +45,10 @@ class BalanceController extends Controller
 
     }
 
-    public function deleteHistoricById(Request $request){
+    public function deleteHistoricById(DeleteHistoricRequest $request){
         
         return $this->repository->deleteHistoric($request);
     }
-
-
 
     public function createcsv($options, $dataUser = null)
     {

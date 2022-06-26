@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 
 class UsersController extends Controller
 {
@@ -22,7 +23,7 @@ class UsersController extends Controller
 
     }
 
-    public function show(Request $request)
+    public function show(UserRequest $request)
     {
        return UserResource::collection($this->repository->getUser($request));
     }
