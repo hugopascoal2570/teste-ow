@@ -70,3 +70,5 @@ O projeto conta com os Seeders dos usuários
 | /api/delete/historic/id| DELETE| ✔ | id do histórico  | Rota para deletar histórico do usuário|
 | /api/search/historic/all/| POST| ✔ | id do usuário  | Rota para exibir histórico do usuário em csv (apenas todas as requisições)|
 
+# o arquivo csv está sendo gerado pelo pacote laravel excel disponível em 
+[https://laravel-excel.com/]
