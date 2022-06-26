@@ -1,41 +1,20 @@
+### Passo a passo da instalação
 
-# Setup Docker Para Projetos Laravel 9 com PHP 8
-[Assine a Academy, e Seja VIP!](https://academy.especializati.com.br)
-
-### Passo a passo
-Clone Repositório
-```sh
-git clone https://github.com/especializati/setup-docker-laravel.git laravel9
-```
-
-```sh
-cd laravel9/
-```
-
-
-Alterne para a branch laravel 8.x
-```sh
-git checkout laravel-9-com-php-8
-```
-
+# atenção o projeto Utiliza o Docker com containers do nginx, redis, mysql, laravel 9, e queue
 
 Remova o versionamento
 ```sh
 rm -rf .git/
 ```
-
-
 Crie o Arquivo .env
 ```sh
 cd example-project/
 cp .env.example .env
 ```
-
-
 Atualize as variáveis de ambiente do arquivo .env
 ```dosini
-APP_NAME=EspecializaTi
-APP_URL=http://localhost:8180
+APP_NAME=Teste_ow
+APP_URL=http://localhost:8990
 
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -51,32 +30,32 @@ SESSION_DRIVER=redis
 REDIS_HOST=redis
 REDIS_PASSWORD=null
 REDIS_PORT=6379
+
 ```
-
-
 Suba os containers do projeto
 ```sh
 docker-compose up -d
 ```
-
-
 Acessar o container
 ```sh
-docker-compose exec app bash
+docker-compose exec ow bash
 ```
-
 
 Instalar as dependências do projeto
 ```sh
 composer install
 ```
-
-
 Gerar a key do projeto Laravel
 ```sh
 php artisan key:generate
 ```
-
-
 Acesse o projeto
-[http://localhost:8180](http://localhost:8180)
+[http://localhost:8990](http://localhost:8990)
+
+# Atenção
+O projeto conta com os Seeders dos usuários
+
+# Rotas 
+| Rota                    |  Método          | Precisa de Permissão  | Requer Parametros no Body  |       Descrição     | 
+| ------------------- | ------------------- | ---------------------  | -------------------------- |  -------------------|
+| /auth| POST| X | Email, password, device_name| Rota Para autenticação de usuário|

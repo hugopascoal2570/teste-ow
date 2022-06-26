@@ -23,6 +23,7 @@ class UserRepository{
 
     public function getAllUsers(){
         return $this->entity->orderBy('id','desc')->paginate();
+        
     }
 
     public function getUser(Request $request){
