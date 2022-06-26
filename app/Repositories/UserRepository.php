@@ -49,14 +49,10 @@ class UserRepository{
         if($verifyId == 'true'){
             return response()->json(['error'=>'existem dados do usuário não podemos apagar'], 401);   
         }
-         $this->entity->where('id',$id)->firstOrFail()->delete();
-         if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Record not found.',
-                ], 404);
+         $result = $this->entity->where('id',$id)->delete();
+         return response()->json(['success'=>'deletado com sucesso'], 200);   
         }   
- }
-
+ 
     public function depositBalance($request, $balance){
 
         $balance = auth()->user()->balance()->firstOrCreate([]);
@@ -73,19 +69,23 @@ class UserRepository{
     }
     
     public function historics(){
-        return $this->repository->with('user')->get();
+        return dd($this->repository->with('user')->get());
 
     }
 
-    public function SearchHistoric(){
+    public function HistoricAll(){
         
-    }
+            $result = $this->repository->with('user')->get();
+            return $result;
+        } 
+    
 
     public function deleteHistoric($request){
 
         $historic_id = $request->all();
 
-       return  $this->repository->where('id',$historic_id)->with('user')->delete();
+      $this->repository->where('id',$historic_id)->with('user')->firstOrFail()->delete();
+      return response()->json(['success'=>'deletado com sucesso'], 200);
 
     }
 }

@@ -31,7 +31,7 @@ class BalanceController extends Controller
     public function historic(){
         return UserResource::collection($this->repository->historics());
     }
-
+    
     public function searchHistoric(){
         return UserResource::collection($this->repository->SearchHistoric());
     }

@@ -32,15 +32,10 @@ class Historic extends Model
         return $types[$type];
     }
 
-    public function search(Array $data, $totalPage)
-    {
-
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 
 }
