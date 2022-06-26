@@ -56,6 +56,8 @@ Acesse o projeto
 O projeto conta com os Seeders dos usuários
 
 # Rotas 
-| Rota                    |  Método          | Precisa de Permissão  | Requer Parametros no Body  |       Descrição     | 
+| Rota |Método| Precisa estar autenticado  | Requer Parametros no Body  |       Descrição     | 
 | ------------------- | ------------------- | ---------------------  | -------------------------- |  -------------------|
-| /auth| POST| X | Email, password, device_name| Rota Para autenticação de usuário|
+|/register| POST | X | Name, email, password,birthday | Rota para criação de usuário|
+| /auth| POST| X | Email, password, device_name| Rota para autenticação de usuário|
+| /auth| GET| ✔ | x| Rota para busca de todos os usuários|
