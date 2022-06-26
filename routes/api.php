@@ -26,8 +26,11 @@ Route::delete('/user/delete/{id}',[UsersController::class,'deleteUser']);
 
 Route::get('/historic', [BalanceController::class,'historic'])->name('historic');
 
+// filter all historics by laravel excel
+Route::post('/search/historic/all',[BalanceController::class,'searchHistoricAll']);
+
 // filter all historics 
-Route::post('/search/historic/{filter}',[BalanceController::class,'searchHistoricAll']);
+Route::post('/search/historic/{filter}',[BalanceController::class,'searchHistoric']);
 
 //deposito
 Route::post('/deposit/{value}', [BalanceController::class,'deposit']);

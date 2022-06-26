@@ -9,6 +9,8 @@ use App\Models\Balance;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
+
+
 class BalanceController extends Controller
 {
     
@@ -36,8 +38,21 @@ class BalanceController extends Controller
         return UserResource::collection($this->repository->SearchHistoric());
     }
 
+    public function searchHistoricAll(){
+
+        return $this->repository->SearchHistoric();
+
+    }
+
     public function deleteHistoricById(Request $request){
         
         return $this->repository->deleteHistoric($request);
+    }
+
+
+
+    public function createcsv($options, $dataUser = null)
+    {
+        return Excel::download(new HistoricsExport, 'users.csv');
     }
 }

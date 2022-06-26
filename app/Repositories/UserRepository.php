@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use App\Exports\HistoricsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserRepository{
 
@@ -73,12 +75,11 @@ class UserRepository{
 
     }
 
-    public function HistoricAll(){
+    public function SearchHistoric(){
         
-            $result = $this->repository->with('user')->get();
-            return $result;
-        } 
-    
+        return Excel::download(new HistoricsExport, 'users.csv');
+       
+    }
 
     public function deleteHistoric($request){
 
