@@ -12,7 +12,7 @@ class Historic extends Model
     
     protected $table ='historics';
 
-    protected $fillable = ['type', 'amount', 'total_before', 'total_after','date'];
+    protected $fillable = ['user_id','type', 'amount', 'total_before', 'total_after','date'];
 
     public function getDateAttribute($value)
     {

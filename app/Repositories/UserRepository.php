@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
@@ -11,91 +11,130 @@ use App\Exports\HistoricsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
-class UserRepository{
-
+class UserRepository
+{
     protected $entity, $repository;
     public function __construct(User $model, Historic $historics)
     {
         $this->entity = $model;
         $this->repository = $historics;
-
     }
 
-    public function getAllUsers(){
-        return $this->entity->orderBy('id','desc')->paginate();
-        
+    public function getAllUsers()
+    {
+        return $this->entity->orderBy('id', 'desc')->paginate();
     }
 
-    public function getUser( $request){
-        
-        return $this->entity->find($request);
+    public function getUser($id)
+    {
+        return $this->entity->find($id);
     }
 
-    public function createNewUser(array $data) {
-
+    public function createNewUser(array $data)
+    {
         $niver = Carbon::parse($data['birthday'])->age;
-        if($niver < 18){
-            return response()->json(['error'=>'usuário menor de idade'], 401);
+        if ($niver < 18) {
+            return response()->json(['error' => 'usuário menor de idade'], 401);
+        } else {
+            return $this->entity->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'birthday' => $data['birthday'],
+            ]);
         }
-        else{
-       return  $this->entity->create([
-            'name' =>$data['name'],
-            'email'=>$data['email'],
-            'password'=>bcrypt($data['password']),
-            'birthday'=>$data['birthday'],
-        ]);
     }
-}
-    public function deleteUserById($request) {
-    $id = $request->all();
-    $verifyId = $this->repository->where('user_id',$id)->with('user')->exists();
-        if($verifyId == 'true'){
-            return response()->json(['error'=>'existem dados do usuário não podemos apagar'], 401);   
+    public function deleteUserById($request)
+    {
+        $id = $request->all();
+        $verifyId = $this->repository
+            ->where('user_id', $id)
+            ->with('user')
+            ->exists();
+        if ($verifyId == 'true') {
+            return response()->json(
+                ['error' => 'existem dados do usuário não podemos apagar'],
+                401
+            );
         }
-         $result = $this->entity->where('id',$id)->delete();
-         return response()->json(['success'=>'deletado com sucesso'], 200);   
-        }   
- 
-    public function depositBalance($request, $balance){
+        $result = $this->entity->where('id', $id)->delete();
+        return response()->json(['success' => 'deletado com sucesso'], 200);
+    }
 
-        $balance = auth()->user()->balance()->firstOrCreate([]);
+    public function depositBalance($request, $balance)
+    {
+        $balance = auth()
+            ->user()
+            ->balance()
+            ->firstOrCreate([]);
         $balance->deposit($request->value);
 
         return $balance;
     }
 
-    public function debitBalance($request, $balance){
-
-    $debit = auth()->user()->balance()->firstOrCreate([]);
-    $debit->debit($request->value);
-    return $debit;
+    public function debitBalance($request, $balance)
+    {
+        $debit = auth()
+            ->user()
+            ->balance()
+            ->firstOrCreate([]);
+        $debit->debit($request->value);
+        return $debit;
     }
 
-    public function refundBalance($request, $balance){
-
-        $debit = auth()->user()->balance()->firstOrCreate([]);
+    public function refundBalance($request, $balance)
+    {
+        $debit = auth()
+            ->user()
+            ->balance()
+            ->firstOrCreate([]);
         $debit->refund($request->value);
         return $debit;
+    }
+
+    public function historics()
+    {
+        $users_historics = $this->entity
+            ->join('historics', 'users.id', '=', 'historics.user_id')
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email',
+                'users.birthday',
+                'historics.user_id',
+                'historics.type',
+                'historics.amount',
+                'historics.total_before',
+                'historics.total_after',
+                'historics.date'
+            )
+            ->paginate(5);
+        if ($users_historics) {
+            return $users_historics;
+        } elseif (is_null($users_historics)) {
+            return response()->json(['error' => 'historics not found'], 404);
         }
-    
-    public function historics(){
-   
-        return dd($this->repository->with('user')->get());
-
     }
 
-    public function SearchHistoric(){
-        
-        return Excel::download(new HistoricsExport, 'users.csv');
-       
+    public function SearchHistoric()
+    {
+        return Excel::download(new HistoricsExport(), 'users.csv');
     }
 
-    public function deleteHistoric($request){
-
+    public function deleteHistoric($request)
+    {
         $historic_id = $request->all();
 
-      $this->repository->where('id',$historic_id)->with('user')->firstOrFail()->delete();
-      return response()->json(['success'=>'deletado com sucesso'], 200);
+        $result = $this->repository
+            ->where('id', $historic_id)
+            ->with('user')
+            ->first();
 
+        if ($result) {
+            $result->delete();
+            return response()->json(['success' => 'deletado com sucesso'], 200);
+        } elseif (is_null($result)) {
+            return response()->json(['message' => 'historic not found'], 404);
+        }
     }
 }
