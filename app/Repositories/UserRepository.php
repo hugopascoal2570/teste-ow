@@ -25,11 +25,19 @@ class UserRepository
         return $this->entity->orderBy('id', 'desc')->paginate();
     }
 
-    public function getUser($id)
+    public function getUser($request)
     {
-        return $this->entity->find($id);
+       $id = $request->all();
+       $user = $this->entity->where('id',$id)->get();
+       if ($user) {
+        return $user;
+    }  elseif (is_null($user)) {
+        return response()->json(
+            ['error' => 'not found users'],
+            404
+        );
     }
-
+    }
     public function createNewUser(array $data)
     {
         $niver = Carbon::parse($data['birthday'])->age;
