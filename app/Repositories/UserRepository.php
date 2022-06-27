@@ -100,6 +100,21 @@ class UserRepository
         return $debit;
     }
 
+    public function values($request){
+        $id = $request->all();
+
+        $values = $this->repository->where('user_id',$id)->get();
+        if($values){
+        $credit = $values->where('type','=','C')->sum('amount');
+        $debit = $values->where('type','=','D')->sum('amount');
+        $refund = $values->where('type','=','R')->sum('amount');
+        return response()->json(['Credit , Debit, Refund '.$credit,$debit,$refund],200);
+        }else{
+            return response()->json(['error' => 'historics not found'], 404);
+        }
+
+    }
+
     public function historics()
     {
         $users_historics = $this->entity

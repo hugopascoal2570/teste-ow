@@ -41,6 +41,9 @@ Route::post('/debit/{value}', [BalanceController::class,'debit']);
 //refund
 Route::post('/refund/{value}', [BalanceController::class,'refund']);
 
+//all  values user by id
+Route::post('/values/user/{id}',[BalanceController::class,'allValues']);
+
 //delete historic
 Route::delete('/delete/historic/{id}',[BalanceController::class,'deleteHistoricById']);
 });

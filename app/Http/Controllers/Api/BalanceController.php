@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteHistoricRequest;
 use App\Http\Requests\MoneyValidationRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Balance;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
-
-
 
 class BalanceController extends Controller
 {
@@ -33,6 +31,10 @@ class BalanceController extends Controller
     public function refund(MoneyValidationRequest $request, Balance $balance){
   
         return new UserResource($this->repository->refundBalance($request, $balance));
+    }
+
+    public function allValues(UserRequest $request){
+        return $this->repository->values($request);
     }
 
     public function historic(){
